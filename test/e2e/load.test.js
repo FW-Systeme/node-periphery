@@ -7,6 +7,9 @@
 //   2. The public API surface is intact.
 //   3. Hardware operations fail with a hardware error, not a JS crash.
 
+// Ensure the real node-gyp-build is used, not the __mocks__ auto-mock.
+jest.unmock('node-gyp-build');
+
 const addon = require('../../index');
 
 describe('native addon loading', () => {

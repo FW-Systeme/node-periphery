@@ -12,6 +12,10 @@ module.exports = {
       displayName: 'e2e',
       testMatch: ['<rootDir>/test/e2e/**/*.test.js'],
       testEnvironment: 'node',
+      // node-gyp-build must NOT be auto-mocked here — e2e tests run against
+      // the real compiled native binary (arm64 prebuild in QEMU).
+      unmockedModulePathPatterns: ['node-gyp-build'],
+      automock: false,
     },
   ],
 };
