@@ -33,10 +33,10 @@ jobs:
           path: prebuilds/
           if-no-files-found: error
 
-  # ── 1b. Native prebuild for linux-arm64 (GitHub-hosted arm64 runner) ─────
+  # ── 1b. Native prebuild for linux-arm64 (self-hosted runner) ───────────────
   prebuild-arm64:
     name: Prebuild (linux-arm64)
-    runs-on: ubuntu-24.04-arm
+    runs-on: [self-hosted, Linux, ARM64, e2e-test]
     steps:
       - uses: actions/checkout@v4
 
