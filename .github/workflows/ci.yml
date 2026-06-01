@@ -68,3 +68,8 @@ jobs:
 
       - name: Run E2E tests
         run: npm run test:e2e
+        env:
+          GPIO_CHIP: 0
+          GPIO_OUTPUT_OFFSET: 4
+          SPI_BUS: 0
+          SPI_DEVICE: 0
