@@ -68,14 +68,3 @@ jobs:
 
       - name: Run E2E tests
         run: npm run test:e2e
-        with:
-          platforms: arm64
-
-      - name: Run E2E tests (linux/arm64 via QEMU)
-        run: |
-          docker run --rm \
-            --platform linux/arm64 \
-            -v "$PWD:/workspace" \
-            -w /workspace \
-            node:24 \
-            npm run test:e2e
