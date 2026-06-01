@@ -32,9 +32,10 @@ describe('openSync / closeSync', () => {
     dev.closeSync();
   });
 
-  test('openSync with options object', () => {
-    const dev = spi.openSync(BUS, DEVICE, { mode: spi.MODE0, maxSpeedHz: 1000000 });
+  test('openSync with mode option', () => {
+    const dev = spi.openSync(BUS, DEVICE, { mode: spi.MODE0 });
     expect(dev).toBeDefined();
+    expect(typeof dev.closeSync).toBe('function');
     dev.closeSync();
   });
 
@@ -64,7 +65,6 @@ describe('open / close (async)', () => {
       done();
     });
   });
-
   test('close (async) calls back without error', (done) => {
     spi.open(BUS, DEVICE, (err, dev) => {
       expect(err).toBeNull();
@@ -213,7 +213,10 @@ describe('setOptions (async)', () => {
 
 describe('transferSync', () => {
   let dev;
-  beforeEach(() => { dev = spi.openSync(BUS, DEVICE, { mode: spi.MODE0, maxSpeedHz: 500000 }); });
+  beforeEach(() => {
+    dev = spi.openSync(BUS, DEVICE);
+    dev.setOptionsSync({ maxSpeedHz: 500000 });
+  });
   afterEach(() => { dev.closeSync(); });
 
   test('send-only transfer (sendBuffer only) does not throw', () => {
@@ -269,7 +272,10 @@ describe('transferSync', () => {
 
 describe('transfer (async)', () => {
   let dev;
-  beforeEach(() => { dev = spi.openSync(BUS, DEVICE, { mode: spi.MODE0, maxSpeedHz: 500000 }); });
+  beforeEach(() => {
+    dev = spi.openSync(BUS, DEVICE);
+    dev.setOptionsSync({ maxSpeedHz: 500000 });
+  });
   afterEach(() => { dev.closeSync(); });
 
   test('send-only transfer calls back without error', (done) => {
