@@ -44,12 +44,23 @@ MockGpio.accessible = false;
 MockGpio.HIGH = 1;
 MockGpio.LOW = 0;
 
+const mockSpiDevice = {
+  close:          jest.fn((cb) => cb(null)),
+  closeSync:      jest.fn(),
+  transfer:       jest.fn((msg, cb) => cb(null)),
+  transferSync:   jest.fn(),
+  getOptions:     jest.fn((cb) => cb(null, { mode: 0, bitsPerWord: 8, maxSpeedHz: 500000, chipSelectHigh: false, lsbFirst: false, threeWire: false, loopback: false, noChipSelect: false, ready: false })),
+  getOptionsSync: jest.fn(() => ({ mode: 0, bitsPerWord: 8, maxSpeedHz: 500000, chipSelectHigh: false, lsbFirst: false, threeWire: false, loopback: false, noChipSelect: false, ready: false })),
+  setOptions:     jest.fn((opts, cb) => cb(null)),
+  setOptionsSync: jest.fn(),
+};
+
 const mockSpi = {
   open: jest.fn((_bus, _device, ...args) => {
     const cb = args[args.length - 1];
-    if (typeof cb === 'function') cb(null, {});
+    if (typeof cb === 'function') cb(null, mockSpiDevice);
   }),
-  openSync: jest.fn(() => ({})),
+  openSync: jest.fn(() => mockSpiDevice),
   MODE0: 0,
   MODE1: 1,
   MODE2: 2,

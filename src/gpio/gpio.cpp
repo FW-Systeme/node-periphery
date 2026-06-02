@@ -171,6 +171,9 @@ Gpio::Gpio(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Gpio>(info) {
         if (opts.Has("debounceTimeout") && opts.Get("debounceTimeout").IsNumber()) {
             debounce_timeout_ = opts.Get("debounceTimeout").As<Napi::Number>().Uint32Value();
         }
+        if (opts.Has("consumer") && opts.Get("consumer").IsString()) {
+            consumer_ = opts.Get("consumer").As<Napi::String>().Utf8Value();
+        }
     }
 
     // Open the gpiochip character device
@@ -259,7 +262,7 @@ void Gpio::OpenLine(Napi::Env env) {
     struct gpio_v2_line_request req = {};
     req.offsets[0] = offset_;
     req.num_lines = 1;
-    strncpy(req.consumer, "node-periphery", sizeof(req.consumer) - 1);
+    strncpy(req.consumer, consumer_.c_str(), sizeof(req.consumer) - 1);
     req.config = BuildConfig();
 
     if (ioctl(chip_fd_, GPIO_V2_GET_LINE_IOCTL, &req) < 0) {

@@ -8,6 +8,8 @@ export interface GpioOptions {
     activeLow?: boolean;
     /** Kernel-native debounce in milliseconds. Default: 0 (disabled) */
     debounceTimeout?: number;
+    /** Consumer label shown in gpioinfo. Default: 'node-periphery' */
+    consumer?: string;
 }
 
 export declare class Gpio {
@@ -66,4 +68,71 @@ export declare class Gpio {
     static readonly LOW: 0;
 }
 
-export declare const spi: any;
+// ── SPI types ────────────────────────────────────────────────────────────────
+
+/** Options read back from or written to a SPI device. */
+export interface SpiDeviceOptions {
+    /** SPI mode (use spi.MODE0 – spi.MODE3). */
+    mode?: number;
+    /** Bits per word. Typically 8. */
+    bitsPerWord?: number;
+    /** Maximum transfer speed in Hz. */
+    maxSpeedHz?: number;
+    chipSelectHigh?: boolean;
+    lsbFirst?: boolean;
+    threeWire?: boolean;
+    loopback?: boolean;
+    noChipSelect?: boolean;
+    ready?: boolean;
+}
+
+/** One segment of a SPI transfer message. */
+export interface SpiMessage {
+    /** Data to send. Required unless receiveBuffer is set. */
+    sendBuffer?: Buffer;
+    /** Buffer to fill with received data. Required unless sendBuffer is set. */
+    receiveBuffer?: Buffer;
+    /** Number of bytes to transfer. */
+    byteLength: number;
+    /** Per-segment speed override in Hz. */
+    speedHz?: number;
+    /** Delay in microseconds after this segment. */
+    microSecondDelay?: number;
+}
+
+/** A handle to an open SPI device, returned by spi.open / spi.openSync. */
+export interface SpiDevice {
+    /** Close the device asynchronously. */
+    close(callback: (err: Error | null) => void): void;
+    /** Close the device synchronously. */
+    closeSync(): void;
+
+    /** Perform a SPI transfer asynchronously. */
+    transfer(message: SpiMessage[], callback: (err: Error | null) => void): void;
+    /** Perform a SPI transfer synchronously. */
+    transferSync(message: SpiMessage[]): void;
+
+    /** Read device options asynchronously. */
+    getOptions(callback: (err: Error | null, options: SpiDeviceOptions) => void): void;
+    /** Read device options synchronously. */
+    getOptionsSync(): SpiDeviceOptions;
+
+    /** Write device options asynchronously. */
+    setOptions(options: SpiDeviceOptions, callback: (err: Error | null) => void): void;
+    /** Write device options synchronously. */
+    setOptionsSync(options: SpiDeviceOptions): void;
+}
+
+export declare const spi: {
+    /** Open a SPI device asynchronously. */
+    open(bus: number, device: number, callback: (err: Error | null, dev: SpiDevice) => void): void;
+    open(bus: number, device: number, options: SpiDeviceOptions, callback: (err: Error | null, dev: SpiDevice) => void): void;
+
+    /** Open a SPI device synchronously. */
+    openSync(bus: number, device: number, options?: SpiDeviceOptions): SpiDevice;
+
+    readonly MODE0: 0;
+    readonly MODE1: 1;
+    readonly MODE2: 2;
+    readonly MODE3: 3;
+};

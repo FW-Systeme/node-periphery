@@ -59,6 +59,7 @@ private:
     std::string edge_{"none"};
     bool active_low_{false};
     uint32_t debounce_timeout_{0};
+    std::string consumer_{"node-periphery"};
 
     // Watcher state
     std::atomic<bool> watching_{false};
