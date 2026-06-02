@@ -221,6 +221,9 @@ Napi::Value Transfer(SpiDevice* device, const Napi::CallbackInfo& info) {
 
     if (ToSpiTransfers(message, transfers) == -1) {
         free(transfers);
+        // ToSpiTransfers set a pending JS exception — retrieve it and pass to callback
+        Napi::Error pendingErr = env.GetAndClearPendingException();
+        callback.Call({pendingErr.Value()});
         return env.Undefined();
     }
 
@@ -249,10 +252,13 @@ Napi::Value TransferSync(SpiDevice* device, const Napi::CallbackInfo& info) {
         malloc(count * sizeof(spi_ioc_transfer)));
     memset(transfers, 0, count * sizeof(spi_ioc_transfer));
 
-    if (ToSpiTransfers(message, transfers) == 0) {
-        if (DoTransfer(fd, transfers, count) == -1) {
-            MakeErrnoError(env, errno, "transferSync").ThrowAsJavaScriptException();
-        }
+    if (ToSpiTransfers(message, transfers) != 0) {
+        free(transfers);
+        return env.Undefined();  // exception already queued by ToSpiTransfers
+    }
+
+    if (DoTransfer(fd, transfers, count) == -1) {
+        MakeErrnoError(env, errno, "transferSync").ThrowAsJavaScriptException();
     }
 
     free(transfers);
