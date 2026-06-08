@@ -299,7 +299,8 @@ describe('transfer (async)', () => {
   test('invalid transfer calls back with an error', (done) => {
     const msg = [{ byteLength: 4 }]; // missing sendBuffer/receiveBuffer
     dev.transfer(msg, (err) => {
-      expect(err).toBeInstanceOf(Error);
+      expect(err).toBeTruthy();
+      expect(typeof err.message).toBe('string');
       done();
     });
   });

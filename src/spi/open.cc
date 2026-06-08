@@ -71,7 +71,7 @@ public:
     void OnOK() override {
         Napi::HandleScope scope(Env());
         device_->SetFd(fd_);
-        Callback().Call({Env().Null()});
+        Callback().Call({Env().Null(), device_->Value()});
     }
 
 private:
