@@ -1,7 +1,6 @@
 'use strict';
 
-// Explicitly activate the manual mock in __mocks__/node-gyp-build.js
-jest.mock('node-gyp-build');
+jest.mock('node-gyp-build', () => require('./node-gyp-build.mock'));
 
 const { spi } = require('../../index');
 

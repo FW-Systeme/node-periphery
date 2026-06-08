@@ -1,9 +1,5 @@
 'use strict';
 
-// Manual Jest mock for node-gyp-build.
-// Simulates the native C++ addon so unit tests run without a compiled binary.
-// Usage in test files: jest.mock('node-gyp-build');
-
 class MockGpio {
   constructor(offset, direction, ...args) {
     this._offset = offset;
@@ -11,7 +7,6 @@ class MockGpio {
     this._edge = 'none';
     this._activeLow = false;
 
-    // Parse optional (edge, options) or (options) overloads
     if (args.length > 0) {
       if (typeof args[0] === 'string') {
         this._edge = args[0];
@@ -67,5 +62,4 @@ const mockSpi = {
   MODE3: 3,
 };
 
-// node-gyp-build exports a factory: require('node-gyp-build')(__dirname) → addon
 module.exports = () => ({ Gpio: MockGpio, spi: mockSpi });
