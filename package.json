@@ -1,5 +1,5 @@
 {
-  "name": "@chris576/node-periphery",
+  "name": "@fw-systeme/node-periphery",
   "version": "0.1.6",
   "description": "Native Node.js addon written in C++",
   "main": "index.js",
