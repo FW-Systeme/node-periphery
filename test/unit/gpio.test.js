@@ -14,7 +14,7 @@ describe('Gpio module exports', () => {
   });
 
   test('LOW constant equals 0', () => {
-    expect(Gpio.LOW).toBe(0);
+    expect(Gpio.LOW).toBe(0);//
   });
 
   test('accessible is a boolean', () => {
