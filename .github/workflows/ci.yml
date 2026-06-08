@@ -26,7 +26,7 @@ jobs:
   # ── Prebuild + E2E — master push only, self-hosted arm64 ─────────────────
   prebuild-arm64:
     name: Prebuild (linux-arm64)
-    runs-on: [self-hosted, Linux, ARM64, e2e-test]
+    runs-on: [self-hosted, Linux, ARM64, e2e]
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
